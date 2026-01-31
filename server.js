@@ -31,3 +31,31 @@ app.get('/collectibles/:index', (req, res) => {
             res.send(`The <strong>${rpId}</strong> is not yet in stock. Check back soon!`)
         }
 })
+
+  const shoes = [
+      { name: "Birkenstocks", price: 50, type: "sandal" },
+      { name: "Air Jordans", price: 500, type: "sneaker" },
+      { name: "Air Mahomeses", price: 501, type: "sneaker" },
+      { name: "Utility Boots", price: 20, type: "boot" },
+      { name: "Velcro Sandals", price: 15, type: "sandal" },
+      { name: "Jet Boots", price: 1000, type: "boot" },
+      { name: "Fifty-Inch Heels", price: 175, type: "heel" }
+  ];
+
+
+app.get('/shoes/query', (req, res) => {
+    const { type, minPrice, maxPrice } = req.query
+
+    let filteredShoes = shoes
+
+    if (type) {
+        filteredShoes = filteredShoes.filter(shoe => shoe.type === type)
+    }
+    if (minPrice) {
+        filteredShoes = filteredShoes.filter(shoe => shoe.price >= minPrice)
+    }
+    if (maxPrice) {
+        filteredShoes = filteredShoes.filter(shoe => shoe.price <= maxPrice)
+    }
+    res.send(filteredShoes)
+})
