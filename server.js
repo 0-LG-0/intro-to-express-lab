@@ -25,4 +25,9 @@ app.get('/roll/:number', (req, res) => {
 
 app.get('/collectibles/:index', (req, res) => {
     const cId = collectibles[req.params.index]
+    const rpId = req.params.index
+    if (rpId == 0 || rpId == 1 || rpId ==2) {
+        res.send(`So, you want the ${cId.name}? For ${cId.price}, it can be yours!`)}else {
+            res.send(`The <strong>${rpId}</strong> is not yet in stock. Check back soon!`)
+        }
 })
