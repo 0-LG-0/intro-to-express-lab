@@ -7,21 +7,17 @@ app.get('/greetings/:username', (req, res) => {
 })
 
 app.get('/roll/:number', (req, res) => {
-    const number = Number(req.params.number) 
-    const roll = Math.floor(Math.random() * (number +1))
+    let msg
+    const input = req.params.number
+    const number = Number(req.params.number)
 
     if (isNaN(number)) {
-        return res.send(`<h1>You must specify a number, input isn't a number.</h1>`)
-    }else {
-        res.send(`<h1>You rolled a ${roll}</h1>`)
+        msg = `<h1>You must specify a number, ${input} isn't a number.</h1>`
+    }else{
+        const roll = Math.floor(Math.random() * (number +1))
+        msg = `<h1>You rolled a ${roll}</h1>`
     }
-    /*const num = req.params.number
-    if (Number.isInteger(parseInt(num))) {
-        res.send(`<h1>You rolled a ${Math.floor(Math.random() * num)}</h1>`)
-    }else {
-        res.send(`You must specify a number, ${num} is not a number.`)
-    }
-        */
+    res.send(msg)
 })
 
   const collectibles = [
@@ -31,16 +27,20 @@ app.get('/roll/:number', (req, res) => {
   ];
 
 app.get('/collectibles/:index', (req, res) => {
-    const cId = collectibles[req.params.index]
-    const rpId = req.params.index
-    if (cId) {
-        res.send(`So, you want the <strong>${cId.name}</strong>? For <strong>$${cId.price}</strong>, it can be yours!`)
-        }
-        else if (isNaN(Number(rpId))){
-            res.send(`<strong>${rpId}</strong> is an invalid input`)
+    let msg
+    const rpId = Number(req.params.index)
+    const input = req.params.index
+    
+        if (isNaN(rpId)){
+            msg = `<strong>${input}</strong> is an invalid input`
         }else {
-            res.send(`Item <strong>${rpId}</strong> is not yet in stock. Check back soon!`)
+            msg = `Item <strong>${rpId}</strong> is not yet in stock. Check back soon!`
         }
+        const cId = collectibles[req.params.index]
+        if (cId) {
+            msg = `So, you want the <strong>${cId.name}</strong>? For <strong>$${cId.price}</strong>, it can be yours!`
+        }
+        res.send(msg)
 })
 
   const shoes = [
@@ -64,10 +64,10 @@ app.get('/shoes', (req, res) => {
     if (type) {
         filteredShoes = filteredShoes.filter(shoe => shoe.type === type)
     }
-    if (minPrice) {
+    else if (minPrice) {
         filteredShoes = filteredShoes.filter(shoe => shoe.price >= minPrice)
     }
-    if (maxPrice) {
+    else if (maxPrice) {
         filteredShoes = filteredShoes.filter(shoe => shoe.price <= maxPrice)
     }
     res.send(filteredShoes)
